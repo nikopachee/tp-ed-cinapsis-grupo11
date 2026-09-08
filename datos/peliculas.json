@@ -1,0 +1,14 @@
+[
+    {"titulo": "Matrix", "genero": "Ciencia ficción", "rating": 9.0, "anio": 1999},
+    {"titulo": "Inception", "genero": "Ciencia ficción", "rating": 8.8, "anio": 2010},
+    {"titulo": "Titanic", "genero": "Romance", "rating": 7.8, "anio": 1997},
+    {"titulo": "Whiplash", "genero": "Drama", "rating": 8.5, "anio": 2014},
+    {"titulo": "Interstellar", "genero": "Ciencia ficción", "rating": 8.6, "anio": 2014},
+    {"titulo": "El Padrino", "genero": "Drama", "rating": 9.2, "anio": 1972},
+    {"titulo": "Coco", "genero": "Animación", "rating": 8.4, "anio": 2017},
+    {"titulo": "Joker", "genero": "Drama", "rating": 8.4, "anio": 2019},
+    {"titulo": "La La Land", "genero": "Musical", "rating": 8.0, "anio": 2016},
+    {"titulo": "Parásitos", "genero": "Drama", "rating": 8.6, "anio": 2019},
+    {"titulo": "El Origen del Planeta de los Simios", "genero": "Ciencia ficción", "rating": 7.6, "anio": 2011},
+    {"titulo": "Toy Story", "genero": "Animación", "rating": 8.3, "anio": 1995}
+]

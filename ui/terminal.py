@@ -1,4 +1,11 @@
+import sys
+from pathlib import Path
+
+# Fuerza a Python a buscar módulos desde la raíz del repositorio
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 import json
+from estructuras.arbol_binario import ArbolBST  # Importación movida abajo del sys.path
 from modelos.pelicula import Pelicula
 
 
@@ -8,7 +15,13 @@ def cargar_datos():
     peliculas = []
     for d in datos:
         peliculas.append(Pelicula(d["titulo"], d["genero"], d["rating"], d["anio"]))
-    return peliculas
+
+    arbol = ArbolBST()
+    for elemento in peliculas:
+        arbol.insertar(elemento, clave=lambda e: e.titulo.lower())
+
+    # Retornamos ambos para usarlos según convenga
+    return peliculas, arbol
 
 
 def mostrar_menu():
@@ -22,15 +35,19 @@ def mostrar_menu():
     print("-" * 40)
 
 
-def buscar(peliculas):
+# ---------------------------------------------------------
+# CAMBIO 2.4: Ahora recibe 'arbol' y usa la búsqueda del BST
+# ---------------------------------------------------------
+def buscar(arbol):
     titulo = input("Título a buscar: ")
-    encontradas = False
-    for p in peliculas:
-        if titulo.lower() in p.titulo.lower():
-            print(p)
-            encontradas = True
-    if not encontradas:
-        print("Fin de resultados.")
+
+    # Búsqueda usando el árbol BST
+    resultado = arbol.buscar(titulo.lower(), clave=lambda e: e.titulo.lower())
+
+    if resultado:
+        print(resultado)
+    else:
+        print("Fin de resultados / Película no encontrada.")
 
 
 def listar(peliculas):
@@ -50,14 +67,16 @@ def filtrar_por_genero(peliculas):
 
 
 def main():
-    peliculas = cargar_datos()
+    # Recibimos la lista y el árbol cargados
+    peliculas, arbol = cargar_datos()
 
     while True:
         mostrar_menu()
         opcion = input("> Opción: ")
 
         if opcion == "1":
-            buscar(peliculas)
+            # Le pasamos el árbol a la función buscar
+            buscar(arbol)
         elif opcion == "2":
             listar(peliculas)
         elif opcion == "3":

@@ -7,7 +7,32 @@ búsqueda por [atributo elegido, ej: título] de forma más eficiente.
 título, así que ordenamos por título para que la búsqueda sea directa."]
 ## 3. Prueba del árbol
 Salida de `python algoritmos/probar_bst.py`:
-[PEGÁ AQUÍ la salida del Paso 3.4]
+Altura del árbol: 4
+
+--- inorder (ordenado alfabéticamente) ---
+  Arrival (rating 8.4)
+  Blade Runner (rating 8.5)
+  Inception (rating 8.8)
+  Matrix (rating 9.0)
+  Titanic (rating 7.8)
+
+--- preorder ---
+  Matrix
+  Inception
+  Blade Runner
+  Arrival
+  Titanic
+
+--- postorder ---
+  Arrival
+  Blade Runner
+  Inception
+  Titanic
+  Matrix
+
+--- búsquedas ---
+Buscar 'matrix': Matrix (rating 9.0)
+Buscar 'zzz': None
 ## 4. Comparación de tiempos
 En la tabla siguiente, los tiempos son **reales**, sacados con nuestro
 script `algoritmos/medir_tiempos.py`. NO inventar números.
@@ -29,4 +54,4 @@ O(n) en el peor caso si está degenerado (como una lista).
 tarda X ms y el árbol Y ms. El árbol conviene para búsquedas frecuentes;
 el costo de construir el árbol se paga una sola vez."]
 ## 7. Errores o dudas que tuvimos
-[Si tuvieron algún problema y cómo lo resolvieron. Suma puntos mostrarlo.]
+[Si tuvieron algún problema y cómo lo resolvieron. Suma puntos mostrarlo.] 

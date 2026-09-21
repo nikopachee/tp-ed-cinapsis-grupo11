@@ -58,6 +58,7 @@ Altura del árbol: 5
 --- búsquedas ---
 Buscar 'matrix': Matrix (1999) - Ciencia ficción - Rating: 9.0 - Estado: Pendiente
 Buscar 'zzz': None
+
 4. Comparación de tiempos
 
 TP2 no era obligatorio y no lo hicimos, así que esta tabla compara búsqueda secuencial vs búsqueda en árbol (sin columna de búsqueda binaria). Los tiempos son reales, sacados con algoritmos/medir_tiempos.py, buscando en cada caso el peor escenario posible para la secuencial (el último elemento de la lista):
@@ -67,11 +68,13 @@ N elementos	Secuencial (ms)	Árbol BST (ms)
 1.000	0.0520	0.0041
 10.000	1.2236	0.0045
 100.000	7.8804	0.0064
+
 5. Análisis de complejidad
 Búsqueda secuencial: O(n). Recorre toda la lista en el peor caso — se nota en la tabla: el tiempo crece de forma prácticamente lineal con N.
 Búsqueda en árbol: O(log n) promedio si el árbol está balanceado; O(n) en el peor caso si está degenerado (como una lista, por ejemplo si los datos ya vinieran ordenados al insertarlos). En nuestra prueba el tiempo casi no crece al aumentar N, lo que confirma el comportamiento logarítmico.
 Inserción en árbol: O(log n) promedio, O(n) peor caso.
 Recorridos (inorder, preorder, postorder): O(n), porque visitan cada nodo una vez.
+
 6. Conclusión
 
 Con 100.000 elementos, la búsqueda secuencial tardó 7.88 ms y la búsqueda en árbol 0.0064 ms: el árbol fue más de 1.200 veces más rápido en ese caso. La diferencia se agranda cuanto más grande es el dataset, porque la secuencial crece linealmente mientras que el árbol casi no se ve afectado. El costo de construir el árbol se paga una sola vez (al cargar los datos), y a partir de ahí todas las búsquedas se benefician. Para nuestra aplicación, donde se buscan películas repetidamente por título, el árbol es claramente la mejor opción.

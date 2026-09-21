@@ -35,9 +35,7 @@ def mostrar_menu():
     print("-" * 40)
 
 
-# ---------------------------------------------------------
-# CAMBIO 2.4: Ahora recibe 'arbol' y usa la búsqueda del BST
-# ---------------------------------------------------------
+
 def buscar(arbol):
     titulo = input("Título a buscar: ")
 

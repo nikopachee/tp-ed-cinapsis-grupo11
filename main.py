@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from estructuras.arbol_binario import ArbolBST
 from ui.terminal import cargar_datos, mostrar_menu, listar, filtrar_por_genero
 
@@ -41,3 +42,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+=======
+from estructuras.arbol_binario import ArbolBST
+>>>>>>> bfa47b2850fa85d9981778c75f2bc530a7b073c4

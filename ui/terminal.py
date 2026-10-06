@@ -35,8 +35,6 @@ def mostrar_menu():
     print("-" * 40)
 
 
-<<<<<<< HEAD
-=======
 
 def buscar(arbol):
     titulo = input("Título a buscar: ")
@@ -50,7 +48,6 @@ def buscar(arbol):
         print("Fin de resultados / Película no encontrada.")
 
 
->>>>>>> bfa47b2850fa85d9981778c75f2bc530a7b073c4
 def listar(peliculas):
     for i, p in enumerate(peliculas, 1):
         print(f"{i}. {p}")
@@ -64,9 +61,7 @@ def filtrar_por_genero(peliculas):
             print(p)
             encontradas = True
     if not encontradas:
-<<<<<<< HEAD
         print("No hay películas de ese género.")
-=======
         print("No hay películas de ese género.")
 
 
@@ -94,4 +89,3 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> bfa47b2850fa85d9981778c75f2bc530a7b073c4

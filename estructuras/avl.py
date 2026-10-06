@@ -256,15 +256,14 @@ def comparar_bst_vs_avl(lista_datos, clave):
     """
     import time
 
-    # --- BST común (usa arboles.py) ---
+    # --- BST común (usa arbol_binario.py) ---
     try:
-        from arboles import ArbolBST
+        from estructuras.arbol_binario import ArbolBST
     except ImportError:
         try:
-            from estructuras.arboles import ArbolBST
+            from arbol_binario import ArbolBST
         except ImportError:
-            return {"error": "No se encontró arboles.py para comparar"}
-
+            return {"error": "No se encontró arbol_binario.py para comparar"}
     bst = ArbolBST()
     for d in lista_datos:
         bst.insertar(d, clave=clave)

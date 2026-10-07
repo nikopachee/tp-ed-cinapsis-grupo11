@@ -89,3 +89,5 @@ N Elementos | Altura BST | Altura AVL |     BST (ms) |     AVL (ms)
 ### 6 Conclusion:
 
 ### 7 Errores o dudas que tuvimos: 
+cuando intente ejecutar p.titulo.lower() en main Python colapsó porque la clase AVL no tiene un atributo llamado titulo
+la solucion fue: peliculas, _ = cargar_datos(), desempaquetás la tupla: la variable peliculas recibe únicamente la lista limpia de objetos Pelicula, y el arbol AVL secundario se descarta en el _

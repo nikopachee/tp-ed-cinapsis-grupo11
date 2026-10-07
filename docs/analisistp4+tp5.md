@@ -88,4 +88,4 @@ N Elementos | Altura BST | Altura AVL |     BST (ms) |     AVL (ms)
 
 ### 6 Conclusion:
 
-### Errores o dudas que tuvimos: 
+### 7 Errores o dudas que tuvimos: 

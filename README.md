@@ -14,3 +14,6 @@ Sistema de gestión de películas por terminal. Permite agregar películas, marc
 ## Estado
 - TP0: Completado
 - TP1: Completado
+- TP3: Completado
+- TP4: Completado
+- TP5: En proceso

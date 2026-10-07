@@ -1,244 +1,150 @@
 """
 arbol_general.py — Árbol General (N-ario)
 
-Un árbol general donde cada nodo puede tener cualquier cantidad de hijos.
-Se usa para representar jerarquías del dominio (categorías, géneros, etc.).
+Representa una jerarquía de categorías del dominio: en este proyecto,
+"Películas" como raíz, los géneros como nivel intermedio, y cada
+película como hoja dentro de su género.
 
 Uso:
-    from estructuras.arbol_general import NodoGeneral, ArbolGeneral
+    from estructuras.arbol_general import ArbolGeneral
 
     arbol = ArbolGeneral()
     arbol.insertar_raiz("Películas")
-    nodo_cat = arbol.agregar_hijo("Películas", "Ciencia Ficción")
-    arbol.agregar_hijo(nodo_cat, "Cyberpunk")
-    arbol.agregar_hijo(nodo_cat, "Viajes temporales")
+    nodo_genero = arbol.agregar_hijo(arbol.raiz, "Drama")
+    arbol.agregar_hijo(nodo_genero, "Whiplash", dato=pelicula_whiplash)
 """
 
 
 class NodoGeneral:
-    """Nodo de un árbol general: tiene un dato y una lista de hijos."""
+    """Cada nodo guarda un nombre (la categoría o el título), un dato
+    opcional (solo las hojas de película lo usan) y una lista de hijos,
+    que puede tener cualquier cantidad de elementos (0, 1, 2, 10...)."""
 
-    def __init__(self, dato):
-        self.dato = dato
+    def __init__(self, nombre, dato=None):
+        self.nombre = nombre
+        self.dato = dato      # None para nodos de categoría, la Pelicula para las hojas
         self.hijos = []
-
-    def __repr__(self):
-        return f"Nodo({self.dato})"
 
 
 class ArbolGeneral:
-    """Árbol General (n-ario). Cada nodo puede tener 0 o más hijos.
-
-    Se usa para representar jerarquías naturales del dominio, como:
-    Películas → Ciencia Ficción → Cyberpunk, Viajes Temporales, IA
-             → Acción
-             → Comedia
-    """
+    """Árbol N-ario: cada nodo puede tener cualquier cantidad de hijos,
+    a diferencia de un árbol binario donde como máximo tiene dos."""
 
     def __init__(self):
         self.raiz = None
 
     # ==================== INSERCIÓN ====================
 
-    def insertar_raiz(self, dato):
+    def insertar_raiz(self, nombre):
         """Crea el nodo raíz del árbol."""
-        self.raiz = NodoGeneral(dato)
+        self.raiz = NodoGeneral(nombre)
         return self.raiz
 
-    def agregar_hijo(self, nodo_padre, dato):
-        """Agrega un hijo al nodo padre y retorna el nuevo nodo creado."""
-        if nodo_padre is None and self.raiz is None:
-            raise ValueError("El árbol no tiene raíz. Use insertar_raiz primero.")
-
-        nuevo_nodo = NodoGeneral(dato)
+    def agregar_hijo(self, nodo_padre, nombre, dato=None):
+        """Agrega un nuevo nodo como hijo de `nodo_padre` y lo devuelve,
+        para poder encadenar más hijos debajo de él si hace falta."""
+        nuevo_nodo = NodoGeneral(nombre, dato)
         nodo_padre.hijos.append(nuevo_nodo)
         return nuevo_nodo
 
-    def buscar(self, valor):
-        """Busca un nodo cuyo dato == valor en todo el árbol (búsqueda en amplitud).
+    # ==================== BÚSQUEDA ====================
 
-        Devuelve el nodo o None si no existe.
+    def buscar(self, nombre):
+        """Busca un nodo por nombre (categoría o título) en todo el árbol.
+
+        Devuelve el nodo o None si no existe. Recorre todo el árbol porque,
+        a diferencia de un BST/AVL, acá no hay un orden que permita descartar
+        ramas: en el peor caso hay que revisar todos los nodos → O(n).
         """
         if self.raiz is None:
             return None
+        return self._buscar_recursivo(self.raiz, nombre)
 
-        cola = [self.raiz]
-        while cola:
-            actual = cola.pop(0)
-            if actual.dato == valor:
-                return actual
-            cola.extend(actual.hijos)
-        return None
-
-    def buscar_recursivo(self, valor, nodo=None):
-        """Busca un nodo por profundidad (DFS). Devuelve el nodo o None."""
-        if nodo is None:
-            nodo = self.raiz
-        if nodo is None:
-            return None
-        if nodo.dato == valor:
+    def _buscar_recursivo(self, nodo, nombre):
+        if nodo.nombre.lower() == nombre.lower():
             return nodo
         for hijo in nodo.hijos:
-            resultado = self.buscar_recursivo(valor, hijo)
-            if resultado is not None:
-                return resultado
+            encontrado = self._buscar_recursivo(hijo, nombre)
+            if encontrado is not None:
+                return encontrado
         return None
 
     # ==================== RECORRIDOS ====================
 
     def amplitud(self):
-        """Recorrido en amplitud (BFS): nivel por nivel, de arriba hacia abajo.
-
-        Devuelve una lista con los datos en orden de nivel.
-        """
+        """Recorrido por amplitud (BFS): nivel por nivel, de arriba hacia
+        abajo y de izquierda a derecha. Usa una cola (lista como FIFO)."""
         if self.raiz is None:
             return []
 
         resultado = []
         cola = [self.raiz]
         while cola:
-            actual = cola.pop(0)
-            resultado.append(actual.dato)
-            cola.extend(actual.hijos)
+            nodo_actual = cola.pop(0)
+            resultado.append(nodo_actual.nombre)
+            for hijo in nodo_actual.hijos:
+                cola.append(hijo)
         return resultado
 
-    def profundidad_preorder(self, nodo=None, resultado=None):
-        """Recorrido en profundidad preorder (DFS): nodo → hijos de izquierda a derecha.
-
-        Devuelve una lista con los datos en preorder.
-        """
-        if nodo is None:
-            nodo = self.raiz
-        if resultado is None:
-            resultado = []
-        if nodo is None:
-            return resultado
-
-        resultado.append(nodo.dato)
-        for hijo in nodo.hijos:
-            self.profundidad_preorder(hijo, resultado)
+    def profundidad_preorder(self):
+        """Recorrido en profundidad (DFS), preorder: primero el nodo,
+        después cada uno de sus hijos de izquierda a derecha."""
+        resultado = []
+        self._preorder_recursivo(self.raiz, resultado)
         return resultado
 
-    def profundidad_postorder(self, nodo=None, resultado=None):
-        """Recorrido en profundidad postorder (DFS): hijos → nodo.
+    def _preorder_recursivo(self, nodo, resultado):
+        if nodo is not None:
+            resultado.append(nodo.nombre)
+            for hijo in nodo.hijos:
+                self._preorder_recursivo(hijo, resultado)
 
-        Devuelve una lista con los datos en postorder.
-        """
-        if nodo is None:
-            nodo = self.raiz
-        if resultado is None:
-            resultado = []
-        if nodo is None:
-            return resultado
-
-        for hijo in nodo.hijos:
-            self.profundidad_postorder(hijo, resultado)
-        resultado.append(nodo.dato)
+    def profundidad_postorder(self):
+        """Recorrido en profundidad (DFS), postorder: primero todos los
+        hijos (recursivamente), y al final el propio nodo."""
+        resultado = []
+        self._postorder_recursivo(self.raiz, resultado)
         return resultado
+
+    def _postorder_recursivo(self, nodo, resultado):
+        if nodo is not None:
+            for hijo in nodo.hijos:
+                self._postorder_recursivo(hijo, resultado)
+            resultado.append(nodo.nombre)
 
     # ==================== INFORMACIÓN ====================
 
-    def altura(self, nodo=None):
-        """Altura máxima del árbol (o del subárbol dado)."""
-        if nodo is None:
-            nodo = self.raiz
+    def obtener_niveles(self):
+        """Devuelve un diccionario {nivel: [nombres]} agrupando los nodos
+        por profundidad (la raíz está en el nivel 0)."""
+        niveles = {}
+        if self.raiz is None:
+            return niveles
+
+        cola = [(self.raiz, 0)]
+        while cola:
+            nodo_actual, nivel = cola.pop(0)
+            niveles.setdefault(nivel, []).append(nodo_actual.nombre)
+            for hijo in nodo_actual.hijos:
+                cola.append((hijo, nivel + 1))
+        return niveles
+
+    def altura(self):
+        """Profundidad máxima del árbol. Árbol vacío → 0."""
+        return self._altura_recursiva(self.raiz)
+
+    def _altura_recursiva(self, nodo):
         if nodo is None:
             return 0
         if not nodo.hijos:
             return 1
-        return 1 + max(self.altura(hijo) for hijo in nodo.hijos)
+        return 1 + max(self._altura_recursiva(hijo) for hijo in nodo.hijos)
 
-    def cantidad_nodos(self, nodo=None):
-        """Cantidad total de nodos en el árbol (o subárbol)."""
-        if nodo is None:
-            nodo = self.raiz
+    def cantidad_nodos(self):
+        """Cuenta todos los nodos del árbol (categorías + hojas)."""
+        return self._contar_recursivo(self.raiz)
+
+    def _contar_recursivo(self, nodo):
         if nodo is None:
             return 0
-        return 1 + sum(self.cantidad_nodos(hijo) for hijo in nodo.hijos)
-
-    def es_vacio(self):
-        return self.raiz is None
-
-    # ==================== UTILIDADES ====================
-
-    def listar_hijos(self, nodo):
-        """Retorna los datos de los hijos directos de un nodo."""
-        return [hijo.dato for hijo in nodo.hijos]
-
-    def obtener_niveles(self):
-        """Retorna los datos organizados por nivel.
-
-        Devuelve una lista de listas: [[raíz], [hijos_de_raíz], [nietos], ...]
-        """
-        if self.raiz is None:
-            return []
-
-        niveles = []
-        nivel_actual = [self.raiz]
-        while nivel_actual:
-            niveles.append([n.dato for n in nivel_actual])
-            siguiente = []
-            for nodo in nivel_actual:
-                siguiente.extend(nodo.hijos)
-            nivel_actual = siguiente
-        return niveles
-
-    def __repr__(self):
-        if self.raiz is None:
-            return "Árbol General vacío"
-        return f"Árbol General (raíz: {self.raiz.dato}, altura: {self.altura()})"
-
-
-# ==================== EJEMPLO DE USO ====================
-
-if __name__ == "__main__":
-    # Crear un árbol de categorías de películas
-    arbol = ArbolGeneral()
-    arbol.insertar_raiz("Películas")
-
-    ciencia = arbol.agregar_hijo(arbol.raiz, "Ciencia Ficción")
-    accion = arbol.agregar_hijo(arbol.raiz, "Acción")
-    comedia = arbol.agregar_hijo(arbol.raiz, "Comedia")
-
-    arbol.agregar_hijo(ciencia, "Cyberpunk")
-    arbol.agregar_hijo(ciencia, "Viajes temporales")
-    arbol.agregar_hijo(ciencia, "Inteligencia artificial")
-
-    arbol.agregar_hijo(accion, "Superhéroes")
-    arbol.agregar_hijo(accion, "Guerra")
-
-    arbol.agregar_hijo(comedia, "Comedia romántica")
-    arbol.agregar_hijo(comedia, "Comedia negra")
-
-    print("=== Árbol General de Categorías ===")
-    print("Raíz:", arbol.raiz.dato)
-    print("Altura:", arbol.altura())
-    print("Cantidad de nodos:", arbol.cantidad_nodos())
-    print()
-
-    print("--- Recorrido en amplitud ---")
-    print(arbol.amplitud())
-    print()
-
-    print("--- Recorrido en profundidad (preorder) ---")
-    print(arbol.profundidad_preorder())
-    print()
-
-    print("--- Recorrido en profundidad (postorder) ---")
-    print(arbol.profundidad_postorder())
-    print()
-
-    print("--- Niveles ---")
-    for i, nivel in enumerate(arbol.obtener_niveles()):
-        print(f"  Nivel {i}: {nivel}")
-    print()
-
-    print("--- Hijos de 'Ciencia Ficción' ---")
-    nodo_ciencia = arbol.buscar("Ciencia Ficción")
-    if nodo_ciencia:
-        print(arbol.listar_hijos(nodo_ciencia))
-
-    print()
-    print("--- Buscar 'Cyberpunk' ---")
-    resultado = arbol.buscar("Cyberpunk")
-    print("Encontrado:", resultado)
+        return 1 + sum(self._contar_recursivo(hijo) for hijo in nodo.hijos)

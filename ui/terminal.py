@@ -31,21 +31,9 @@ def mostrar_menu():
     print("1. Buscar película por título")
     print("2. Listar todas las películas")
     print("3. Filtrar por género")
+    print("4. Explorar categorías")
     print("0. Salir")
     print("-" * 40)
-
-
-
-def buscar(arbol):
-    titulo = input("Título a buscar: ")
-
-    # Búsqueda usando el árbol BST
-    resultado = arbol.buscar(titulo.lower(), clave=lambda e: e.titulo.lower())
-
-    if resultado:
-        print(resultado)
-    else:
-        print("Fin de resultados / Película no encontrada.")
 
 
 def listar(peliculas):
@@ -62,30 +50,25 @@ def filtrar_por_genero(peliculas):
             encontradas = True
     if not encontradas:
         print("No hay películas de ese género.")
-        print("No hay películas de ese género.")
 
 
-def main():
-    # Recibimos la lista y el árbol cargados
-    peliculas, arbol = cargar_datos()
+def explorar_categorias(arbol_general):
+    """Navega la jerarquía Películas -> Género -> Película del árbol general."""
+    print("\nCategorías disponibles:")
+    for categoria in arbol_general.raiz.hijos:
+        print(f"- {categoria.nombre}")
 
-    while True:
-        mostrar_menu()
-        opcion = input("> Opción: ")
+    nombre_categoria = input("\n¿Qué categoría querés explorar?: ")
+    nodo = arbol_general.buscar(nombre_categoria)
 
-        if opcion == "1":
-            # Le pasamos el árbol a la función buscar
-            buscar(arbol)
-        elif opcion == "2":
-            listar(peliculas)
-        elif opcion == "3":
-            filtrar_por_genero(peliculas)
-        elif opcion == "0":
-            print("¡Hasta luego!")
-            break
-        else:
-            print("Opción inválida, intentá de nuevo.")
+    if nodo is None or nodo is arbol_general.raiz:
+        print("Categoría no encontrada.")
+        return
 
+    if not nodo.hijos:
+        print(f"'{nodo.nombre}' no tiene películas cargadas.")
+        return
 
-if __name__ == "__main__":
-    main()
+    print(f"\nPelículas en '{nodo.nombre}':")
+    for hijo in nodo.hijos:
+        print(f"- {hijo.dato}")

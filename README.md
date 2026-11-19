@@ -1,7 +1,6 @@
 # Cinapsis
 
-Sistema de gestión de películas por terminal. Permite agregar películas, marcar su estado (Pendiente, Viendo, Vista, Abandonada), listarlas, recibir una sugerencia aleatoria entre las pendientes y ver estadísticas de avance.
-
+Sistema de recomendación de películas que permita buscar y explorar títulos por nombre, género o categoría, consultar sus valoraciones, recibir recomendaciones personalizadas y armar maratones.
 ## Integrantes
 - Nicolas Omar Alvarez Pacheco
 - Sebastian Vizgarra
@@ -17,3 +16,7 @@ Sistema de gestión de películas por terminal. Permite agregar películas, marc
 - TP3: Completado
 - TP4: Completado
 - TP5: Completado
+- TP6: Completado
+- TP7: Completado
+- TP8: Completado
+- TP9: Completado

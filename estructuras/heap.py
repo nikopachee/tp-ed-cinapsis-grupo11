@@ -1,37 +1,65 @@
-import heapq
+class MaxHeap:
+    def __init__(self, clave=lambda x: x):
+        self.datos = []
+        self.clave = clave
 
-def dijkstra(grafo_obj, inicio):
-    """
-    Calcula la distancia mínima desde un nodo de inicio a todos los demás 
-    utilizando un Min-Heap (cola de prioridad).
-    """
-    grafo = grafo_obj.grafo
-    
-    # Distancias inicializadas en infinito para todos los nodos
-    distancias = {nodo: float('inf') for nodo in grafo}
-    distancias[inicio] = 0
-    
-    # Min-heap para almacenar (distancia_acumulada, nodo)
-    pq = [(0, inicio)]
-    
-    # Para reconstruir caminos si lo necesitas
-    caminos = {inicio: []}
-    caminos[inicio] = [inicio]
+    def __len__(self):
+        return len(self.datos)
 
-    while pq:
-        dist_actual, nodo_actual = heapq.heappop(pq)
+    def esta_vacio(self):
+        return len(self.datos) == 0
 
-        # Si encontramos una distancia mayor a la ya registrada, la ignoramos
-        if dist_actual > distancias[nodo_actual]:
-            continue
+    def ver_max(self):
+        """Retorna el elemento de mayor prioridad sin extraerlo en O(1)."""
+        return self.datos[0] if not self.esta_vacio() else None
 
-        for vecino, peso in grafo.get(nodo_actual, []):
-            distancia = dist_actual + peso
+    def insertar(self, item):
+        """Inserta un elemento y restaura la propiedad de Max-Heap en O(log n)."""
+        self.datos.append(item)
+        self._flotar(len(self.datos) - 1)
 
-            # Si encontramos un camino más corto al vecino
-            if distancia < distancias[vecino]:
-                distancias[vecino] = distancia
-                caminos[vecino] = caminos[nodo_actual] + [vecino]
-                heapq.heappush(pq, (distancia, vecino))
+    def extraer_max(self):
+        """Extrae y retorna el elemento de mayor prioridad en O(log n)."""
+        if self.esta_vacio():
+            return None
+        if len(self.datos) == 1:
+            return self.datos.pop()
 
-    return distancias, caminos
+        maximo = self.datos[0]
+        self.datos[0] = self.datos.pop()
+        self._hundir(0)
+        return maximo
+
+    def _flotar(self, indice):
+        padre = (indice - 1) // 2
+        while indice > 0 and self.clave(self.datos[indice]) > self.clave(self.datos[padre]):
+            self.datos[indice], self.datos[padre] = self.datos[padre], self.datos[indice]
+            indice = padre
+            padre = (indice - 1) // 2
+
+    def _hundir(self, indice):
+        n = len(self.datos)
+        while True:
+            mayor = indice
+            izq = 2 * indice + 1
+            der = 2 * indice + 2
+
+            if izq < n and self.clave(self.datos[izq]) > self.clave(self.datos[mayor]):
+                mayor = izq
+            if der < n and self.clave(self.datos[der]) > self.clave(self.datos[mayor]):
+                mayor = der
+
+            if mayor != indice:
+                self.datos[indice], self.datos[mayor] = self.datos[mayor], self.datos[indice]
+                indice = mayor
+            else:
+                break
+
+    def obtener_top_n(self, n):
+        """Retorna los N mejores elementos sin modificar el heap original."""
+        copia = MaxHeap(clave=self.clave)
+        copia.datos = list(self.datos)
+        resultado = []
+        for _ in range(min(n, len(copia))):
+            resultado.append(copia.extraer_max())
+        return resultado

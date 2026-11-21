@@ -23,11 +23,11 @@ cd tp-ed-cinapsis-grupo11
 - docs/: documentación del proyecto.
 
 ## Documentación
-Requerimientos
-Casos de uso
-Diagrama de clases
-Diagrama de conexión de estructuras
-Gestión del proyecto
+- Requerimientos
+- Casos de uso
+- Diagrama de clases
+- Diagrama de conexión de estructuras
+- Gestión del proyecto
 
 ## Estado
 - TP0: Completado

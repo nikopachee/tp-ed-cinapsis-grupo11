@@ -12,15 +12,15 @@ cd tp-ed-cinapsis-grupo11
 3. Ejecutar: python ui/terminal.py
 
 ## Estructura del repositorio
-main.py: punto de entrada, arma las estructuras y arranca el menú.
-modelos/: clases del dominio (Pelicula).
-estructuras/: BST, AVL, árbol general, heap y grafo, implementados por el equipo.
-algoritmos/: scripts de prueba y de medición de tiempos.
-servicios/: lógica del recomendador.
-ui/: interfaz de terminal.
-datos/: dataset en JSON.
-tests/: pruebas.
-docs/: documentación del proyecto.
+- main.py: punto de entrada, arma las estructuras y arranca el menú.
+- modelos/: clases del dominio (Pelicula).
+- estructuras/: BST, AVL, árbol general, heap y grafo, implementados por el equipo.
+- algoritmos/: scripts de prueba y de medición de tiempos.
+- servicios/: lógica del recomendador.
+- ui/: interfaz de terminal.
+- datos/: dataset en JSON.
+- tests/: pruebas.
+- docs/: documentación del proyecto.
 
 ## Documentación
 Requerimientos
